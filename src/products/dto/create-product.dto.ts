@@ -1,13 +1,5 @@
-import {
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { IsNumber, IsString, MaxLength, Min, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
   @IsString()
@@ -17,21 +9,22 @@ export class CreateProductDto {
 
   @IsString()
   @MaxLength(255)
-  @IsOptional()
   description: string;
 
-  @IsBoolean()
-  enabled: boolean;
+  @Min(0)
+  @IsNumber({ maxDecimalPlaces: 4 })
+  @Type(() => Number)
+  price: number;
+
+  @Min(0)
+  @IsNumber({ maxDecimalPlaces: 4 })
+  @Type(() => Number)
+  descount_price: number;
 
   @IsString()
-  @IsOptional()
-  image?: string;
-
-  @IsPositive()
-  @IsOptional()
-  stock_quantity?: number;
+  image: string;
 
   @IsNumber()
   @Min(0)
-  price: number;
+  stock_quantity: number;
 }

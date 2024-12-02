@@ -33,5 +33,3 @@ function configureGlobalPipes(app: INestMicroservice) {
     `${enviroment().MICROSERVICE_NAME} running on port ${enviroment().MICROSERVICE_PORT}`,
   );
 })();
-
-
