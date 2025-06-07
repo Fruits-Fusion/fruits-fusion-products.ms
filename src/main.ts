@@ -6,9 +6,9 @@ import enviroment from './config/configuration';
 
 async function createMicroservice() {
   return NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.NATS,
+    transport: Transport.TCP,
     options: {
-      servers: enviroment().MICROSERVICE_SERVERS,
+      port: enviroment().MICROSERVICE_PORT,
     },
   });
 }
@@ -23,7 +23,7 @@ function configureGlobalPipes(app: INestMicroservice) {
 }
 
 (async function main() {
-  const logger = new Logger('ProductMS');
+  const logger = new Logger('MainInstance');
   const app = await createMicroservice();
 
   configureGlobalPipes(app);
