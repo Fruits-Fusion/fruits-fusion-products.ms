@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import type { ProductsService } from './products.service';
+import type { CreateProductDto } from './dto/create-product.dto';
+import type { UpdateProductDto } from './dto/update-product.dto';
+import type { PaginationDto } from 'src/common';
 
 @Controller('products')
 export class ProductsController {
@@ -14,8 +15,8 @@ export class ProductsController {
   }
 
   @MessagePattern('findAllProducts')
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Payload() paginationDto: PaginationDto) {
+    return this.productsService.findAll(paginationDto);
   }
 
   @MessagePattern('findOneProduct')
