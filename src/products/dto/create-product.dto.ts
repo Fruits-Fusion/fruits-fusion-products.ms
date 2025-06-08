@@ -8,7 +8,7 @@ export class CreateProductDto {
   name: string;
 
   @IsString()
-  @MaxLength(255)
+  @MaxLength(300)
   description: string;
 
   @Min(0)

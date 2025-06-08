@@ -6,7 +6,7 @@ import {
 } from './config/server.config';
 
 (async function main() {
-  const logger = new Logger('ProductMS');
+  const logger = new Logger('MainInstance');
   const app = await createMicroservice();
 
   configureGlobalPipes(app);

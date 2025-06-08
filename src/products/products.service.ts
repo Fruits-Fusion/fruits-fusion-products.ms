@@ -1,13 +1,9 @@
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-  OnModuleInit,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PaginationDto } from '../common';
 import { PrismaClient } from '@prisma/client';
+import { RpcException } from '@nestjs/microservices';
 import enviroment from '../config/env.config';
 
 @Injectable()
@@ -34,17 +30,13 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
       take: limit,
     });
 
-    const totalPages = await this.products.count({
-      where: { availability: true },
-    });
-
     return {
       data,
       meta: {
         currentPage: page,
         perPage: limit,
         totalItems: data.length,
-        totalPages,
+        totalPages: data.length / page,
       },
     };
   }
@@ -54,30 +46,59 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
       where: { id, availability: true },
     });
 
-    if (!product)
-      throw new NotFoundException(`Product with id #${id} not found`);
+    if (!product) {
+      throw new RpcException({
+        message: `Product with id #${id} not found`,
+        status: HttpStatus.BAD_REQUEST,
+      });
+    }
 
     return product;
   }
 
-  async update(productId: number, updateProductDto: UpdateProductDto) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id: __, ...rest } = updateProductDto;
+  async update(updateProductDto: UpdateProductDto) {
+    const { id, ...rest } = updateProductDto;
 
-    await this.findOne(productId);
+    await this.findOne(id);
 
-    return this.products.update({
-      where: { id: productId },
-      data: rest,
-    });
+    try {
+      await this.products.update({
+        where: { id },
+        data: rest,
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: `Product with id #${id} was successfully updated`,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      throw new RpcException({
+        message: 'Interal Server Error',
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
   }
 
   async remove(id: number) {
     await this.findOne(id);
 
-    return this.products.update({
-      where: { id },
-      data: { availability: false },
-    });
+    try {
+      await this.products.update({
+        where: { id },
+        data: { availability: false },
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: `Product with id #${id} was successfully removed`,
+        timestamp: new Date().toISOString(),
+      };
+    } catch (error) {
+      throw new RpcException({
+        message: 'Interal Server Error',
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
   }
 }
