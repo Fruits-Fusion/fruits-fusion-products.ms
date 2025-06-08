@@ -3,8 +3,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PaginationDto } from '../common';
 import { PrismaClient } from '@prisma/client';
-import enviroment from '../config/configuration';
 import { RpcException } from '@nestjs/microservices';
+import enviroment from '../config/env.config';
 
 @Injectable()
 export class ProductsService extends PrismaClient implements OnModuleInit {
