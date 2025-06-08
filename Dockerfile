@@ -1,7 +1,7 @@
 # -------------
 # Dependencies
 # -------------
-FROM node:21-alpine3.19
+FROM node:22-alpine3.22
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY package-lock.json ./
