@@ -6,9 +6,9 @@ import enviroment from './env.config';
 
 export async function createMicroservice() {
   return NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.NATS,
+    transport: Transport.TCP,
     options: {
-      servers: enviroment().MICROSERVICE_SERVERS,
+      port: enviroment().MICROSERVICE_PORT,
     },
   });
 }
