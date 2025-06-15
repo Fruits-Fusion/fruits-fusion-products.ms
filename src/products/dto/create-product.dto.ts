@@ -19,7 +19,7 @@ export class CreateProductDto {
   @Min(0)
   @IsNumber({ maxDecimalPlaces: 4 })
   @Type(() => Number)
-  descount_price: number;
+  discount_price: number;
 
   @IsString()
   image: string;

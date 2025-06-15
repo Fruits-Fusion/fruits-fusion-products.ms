@@ -18,12 +18,12 @@ model Products {
   name           String   @unique
   description    String
   price          Float
-  descount_price Float
+  discount_price Float
   availability   Boolean  @default(true)
   image          String
   stock_quantity Int
   created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  updated_at     DateTime @default(now())
 
   @@index([name])
   @@index([availability])

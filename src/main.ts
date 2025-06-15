@@ -8,9 +8,7 @@ import {
 (async function main() {
   const logger = new Logger('MainInstance');
   const app = await createMicroservice();
-
   configureGlobalPipes(app);
-
   await app.listen();
   logger.log(
     `${enviroment().MICROSERVICE_NAME} running on port ${enviroment().MICROSERVICE_PORT}`,
