@@ -22,7 +22,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const { page, limit } = paginationDto;
+    const { page = 1, limit = 10 } = paginationDto;
 
     const data = await this.products.findMany({
       where: { availability: true },
